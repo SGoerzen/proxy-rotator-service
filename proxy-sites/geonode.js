@@ -20,5 +20,5 @@ module.exports = async function ({limit = 50, upTime = 90, country = "DE", anony
 
     const res = await axios.get(url);
 
-    return res.data.data.map(d => `${d.ip}:${d.port}`);
+    return res.data.data.map(({ip, port}) => { return {ip, port} });
 };

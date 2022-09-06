@@ -10,7 +10,7 @@ module.exports = async function ({limit = 50, upTime = 90, country = "DE", anony
     const rows = $("#list table tr td").toArray();
     const values = rows.map(r => $(r).text());
 
-    const ips = [];
+    const proxies = [];
     for (let i = 0; i < values.length; i += 8) {
         const _ip = values[i];
         const _port = values[i+1];
@@ -27,10 +27,10 @@ module.exports = async function ({limit = 50, upTime = 90, country = "DE", anony
             continue;
         }
 
-        ips.push(`${_ip}:${_port}`);
+        proxies.push({ip: _ip, port: _port});
     }
 
     scraper.close();
 
-    return ips;
+    return proxies;
 };

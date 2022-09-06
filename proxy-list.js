@@ -26,29 +26,43 @@ const settings = {
     anonymous: ONLY_ANONYMOUS
 };
 
-module.exports = async function (providers) {
-    return new Promise(async resolve => {
-        const allIps = [];
-        for (const provider of providers) {
-            const ips = await provider(settings);
+async function getProxiesFromProviders(providers) {
+    const allProxies = [];
 
-            for (const ip of ips) {
-                const res = await ping.promise.probe(ip);
+    for (const provider of providers) {
+        const proxies = await provider(settings);
 
-                if (res.alive) {
-                    allIps.push(res.host);
+        for (const {ip, port} of proxies) {
+            const proxy = `${ip}:${port}`;
+
+            // skip if already exists
+            if (allProxies.includes(proxy))
+                continue;
+
+            const res = await ping.promise.probe(ip);
+            if (res.alive) {
+                allProxies.push(proxy);
+                if (allProxies.length >= listLimit) {
+                    return allProxies;
                 }
             }
         }
+    }
+    return allProxies;
+}
+
+module.exports = async function (providers) {
+    return new Promise(async resolve => {
+        const allProxies = await getProxiesFromProviders(providers);
 
         // filter duplicate values
-        const uniqueIps = uniq(allIps);
+        const uniqueProxies = uniq(allProxies);
 
         // limit values
-        if (uniqueIps.length >= listLimit)
-            uniqueIps.length = listLimit;
+        if (uniqueProxies.length >= listLimit)
+            uniqueProxies.length = listLimit;
 
         // return
-        resolve && resolve(uniqueIps);
+        resolve && resolve(uniqueProxies);
     });
 };
