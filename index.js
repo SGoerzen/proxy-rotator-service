@@ -25,20 +25,22 @@ console.log("Whitelist ", whitelist);
         return proxy;
     }
 
-    // Custom Middleware
-    app.use((req, res, next) => {
-        if(whitelist.includes(req.socket.remoteAddress)){
-            // IP is ok, so go on
-            console.log("Passed whitelist.");
-            next();
-        }
-        else{
-            // Invalid ip
-            console.log("Blocked IP: " + req.socket.remoteAddress + ". Not in whitelist.");
-            const err = new Error("Blocked IP: " + req.socket.remoteAddress + ". Not in whitelist.");
-            next(err);
-        }
-    });
+    if (process.env.ENABLE_WHITELIST) {
+        // Custom Middleware
+        app.use((req, res, next) => {
+            if(whitelist.includes(req.socket.remoteAddress)){
+                // IP is ok, so go on
+                console.log("Passed whitelist.");
+                next();
+            }
+            else{
+                // Invalid ip
+                console.log("Blocked IP: " + req.socket.remoteAddress + ". Not in whitelist.");
+                const err = new Error("Blocked IP: " + req.socket.remoteAddress + ". Not in whitelist.");
+                next(err);
+            }
+        });
+    }
 
     // Error handler
     app.use((err, req, res, next) => {
