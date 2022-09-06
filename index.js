@@ -9,9 +9,10 @@ console.log("Whitelist ", whitelist);
 (async function(){
     console.log("Collect and test proxy lists. Please wait a minute...");
     const proxyList = await require("./proxy-list")([
-            require("./proxy-sites/free-proxy-list-net")
+            require("./proxy-sites/free-proxy-list-net"),
+            require("./proxy-sites/geonode")
         ]
-        // todo request after time again
+        // TODO: request after time again
     )
 
     console.log("Collected proxies:", proxyList);

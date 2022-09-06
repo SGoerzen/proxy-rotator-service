@@ -11,9 +11,11 @@
   "author": "Sergej Görzen",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "lodash": "^4.17.21",
     "ping": "^0.4.2",
     "puppeteer": "^17.1.1",
     "puppeteer-extra": "^3.3.4",
@@ -21,5 +23,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
+  },
+  "engines": {
+    "node": "^16.17.0"
   }
 }
