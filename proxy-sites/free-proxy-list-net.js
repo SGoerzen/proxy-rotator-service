@@ -27,7 +27,7 @@ module.exports = async function ({limit = 50, upTime = 90, country = "DE", anony
             continue;
         }
 
-        ips.push(_ip);
+        ips.push(`${_ip}:${_port}`);
     }
 
     scraper.close();
